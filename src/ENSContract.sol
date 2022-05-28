@@ -6,7 +6,7 @@ pragma solidity ^0.8.7;
 /// @notice This contract registers and stores a human-readable name to an ETH address. A miniature version of ENS
 contract ENSContract {
     /// @notice When a name is already taken
-    error NameUnavailableError();
+    error NameUnavailable();
 
     /// @notice When someone tries to modify a name they don't own
     error NameAccessDenied();
@@ -22,7 +22,7 @@ contract ENSContract {
     /// @dev There's an upper bound for registrySize if registry gets larger than uint256
     function register(string calldata name) external returns (bool) {
         if (ensRegistry[name] != address(0)) {
-            revert NameUnavailableError();
+            revert NameUnavailable();
         }
         ensRegistry[name] = msg.sender;
         registrySize += 1;

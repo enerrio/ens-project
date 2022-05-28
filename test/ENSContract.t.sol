@@ -34,7 +34,7 @@ contract ContractTest is Test {
     /// @notice Try to register a name that is already taken
     function testRegisterTakenName() public {
         ensContract.register(SAMPLE_NAME);
-        vm.expectRevert(ENSContract.NameUnavailableError.selector);
+        vm.expectRevert(ENSContract.NameUnavailable.selector);
         ensContract.register(SAMPLE_NAME);
     }
 
