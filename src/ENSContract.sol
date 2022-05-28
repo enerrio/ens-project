@@ -15,10 +15,11 @@ contract ENSContract {
     uint private registrySize;
 
     event AddressRegistered(address indexed owner, string name);
+    event AddressUpdated(address indexed owner, string name);
     event AddressReleased(address indexed owner, string name);
 
     /// @notice Register a human-readable name to the caller's address
-    /// @param name human-readable name to be mapped to caller's address
+    /// @param name Human-readable name to be mapped to caller's address
     /// @dev There's an upper bound for registrySize if registry gets larger than uint256
     function register(string calldata name) external returns (bool) {
         if (ensRegistry[name] != address(0)) {
@@ -27,6 +28,18 @@ contract ENSContract {
         ensRegistry[name] = msg.sender;
         registrySize += 1;
         emit AddressRegistered(msg.sender, name);
+        return true;
+    }
+
+    /// @notice Update the address a name points to. Only name owner can change address
+    /// @param name Human-readable name to be mapped to an address
+    /// @param addr New address that name should be mapped to
+    function update(string calldata name, address addr) external returns (bool) {
+        if (ensRegistry[name] != msg.sender) {
+            revert NameAccessDenied();
+        }
+        ensRegistry[name] = addr;
+        emit AddressUpdated(addr, name);
         return true;
     }
 

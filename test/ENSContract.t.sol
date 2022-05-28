@@ -11,6 +11,7 @@ contract ContractTest is Test {
     string internal constant SAMPLE_NAME = "shakespeare.eth"; 
 
     event AddressRegistered(address indexed owner, string name);
+    event AddressUpdated(address indexed owner, string name);
     event AddressReleased(address indexed owner, string name);
 
     function setUp() public {
@@ -38,6 +39,22 @@ contract ContractTest is Test {
         ensContract.register(SAMPLE_NAME);
     }
 
+    /// @notice Try to update a name
+    function testUpdateName() public {
+        ensContract.register(SAMPLE_NAME);
+        bool success = ensContract.update(SAMPLE_NAME, address(1));
+        assertTrue(success);
+        assertEq(address(1), ensContract.retrieve(SAMPLE_NAME));
+    }
+
+    /// @notice Try to update a non-owner name
+    function testUpdateAsNotOwner() public {
+        ensContract.register(SAMPLE_NAME);
+        vm.expectRevert(ENSContract.NameAccessDenied.selector);
+        vm.prank(address(0));
+        ensContract.update(SAMPLE_NAME, address(1));
+    }
+
     /// TEST EMITS ///
     
     /// @notice Check that address registered event is emitted
@@ -45,6 +62,14 @@ contract ContractTest is Test {
         vm.expectEmit(true, false, false, true);
         emit AddressRegistered(address(this), SAMPLE_NAME);
         ensContract.register(SAMPLE_NAME);
+    }
+
+    /// @notice Check that address update event is emitted
+    function testExpectUpdateEmit() public {
+        ensContract.register(SAMPLE_NAME);
+        vm.expectEmit(true, false, false, true);
+        emit AddressUpdated(address(1), SAMPLE_NAME);
+        ensContract.update(SAMPLE_NAME, address(1));
     }
 
     /// @notice Check that address release event is emitted
