@@ -1,0 +1,8 @@
+ContractTest:testExpectRegisterEmit() (gas: 58273)
+ContractTest:testExpectReleaseEmit() (gas: 45784)
+ContractTest:testGetRegistrySize() (gas: 7556)
+ContractTest:testRegisterOneName() (gas: 53181)
+ContractTest:testRegisterTakenName() (gas: 57675)
+ContractTest:testReleaseAsNotOwner() (gas: 58049)
+ContractTest:testReleaseAsOwner() (gas: 41677)
+ContractTest:testRetrieveOneName() (gas: 54795)
